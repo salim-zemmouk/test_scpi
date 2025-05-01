@@ -1,0 +1,45 @@
+{
+  "ByExatDatta":
+  {
+    "searchTerm": "Coeur",
+
+    "locations": [
+      "France"
+    ],
+    "sectors": [
+      "Bureaux"
+    ],
+    "minimumSubscription": 2656.00,
+    "subscriptionFees": true,
+    "rentalFrequency": "Trimestrielle",
+    "distributionRate": 6.0
+  },
+  "ByMinSubscription":
+  {
+    "minimumSubscription": 200
+  },
+  "BySubscriptionFees":
+  {
+    "subscriptionFees": true
+  },
+  "ByFakeName":
+  {
+    "name": "FakeScpiName"
+  },
+  "scpiSimulation":
+  {
+    "name": "testSimulateur",
+    "simulationDate": "2025-05-01",
+    "scpis":  [
+      {
+        "scpiId": 14,
+        "numberPart": 10,
+        "statYear": 6.2,
+        "partPrice": 664,
+        "rising": 6640,
+        "propertyType": "Pleine propriété"
+      }
+    ]
+  }
+
+}
