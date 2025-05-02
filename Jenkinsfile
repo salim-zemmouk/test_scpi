@@ -11,21 +11,21 @@ node("ci-node") {
     }
 
     stage("Run Cypress Tests") {
-        withCredentials([
-            usernamePassword(credentialsId: 'mchekini', usernameVariable: 'username', passwordVariable: 'password')
-        ]) {
+        withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
             sh """
-                sudo docker run --rm --pull always \
-                  -e USERNAME=$username \
-                  -e PASSWORD=$password \
-                  -v \$(pwd):/app \
-                  -w /app \
+                sudo docker run --rm --pull always \\
+                  -e USERNAME=$username \\
+                  -e PASSWORD=$password \\
+                  -v \$(pwd):/app \\
+                  -w /app \\
                   cypress/included:14.2.1 npm run test
             """
         }
     }
+}
 
-    stage("Archive Screenshots") {
+post {
+    always {
         archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
     }
 }
