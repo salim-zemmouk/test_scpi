@@ -2,7 +2,7 @@ node("ci-node") {
     def GIT_COMMIT_HASH = ""
 
     stage("Cleanup Workspace") {
-        sh 'sudo rm -rf * || true'
+        deleteDir()
     }
 
     stage("Checkout") {
