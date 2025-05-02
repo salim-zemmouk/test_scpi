@@ -10,15 +10,14 @@ node("ci-node") {
         sh "npm install"
     }
 
-    stage("Run Cypress Tests in Docker") {
+    stage("Run Cypress Tests") {
         withCredentials([
-            usernamePassword(credentialsId: 'cypress-username', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')
+            usernamePassword(credentialsId: 'mchekini', usernameVariable: 'username', passwordVariable: 'password')
         ]) {
             sh """
-                docker run --rm \
-                  -e USERNAME=$USERNAME \
-                  -e PASSWORD=$PASSWORD \
-                  -v \$(pwd)/cypress/screenshots:/app/cypress/screenshots \
+                docker run --rm --pull always \
+                  -e USERNAME=$username \
+                  -e PASSWORD=$password \
                   -v \$(pwd):/app \
                   -w /app \
                   cypress/included:14.2.1 npm run test
