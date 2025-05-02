@@ -15,7 +15,7 @@ node("ci-node") {
             usernamePassword(credentialsId: 'mchekini', usernameVariable: 'username', passwordVariable: 'password')
         ]) {
             sh """
-                docker run --rm --pull always \
+                sudo docker run --rm --pull always \
                   -e USERNAME=$username \
                   -e PASSWORD=$password \
                   -v \$(pwd):/app \
