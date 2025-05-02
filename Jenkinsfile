@@ -12,6 +12,7 @@ node("ci-node") {
 
     stage("Install dependencies") {
         sh "npm install"
+        sh "npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator cypress-mochawesome-reporter"
     }
 
     stage("Run Cypress Tests") {
@@ -30,6 +31,15 @@ node("ci-node") {
 
 post {
     always {
-        archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+       # archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+
+        publishHTML([
+            reportDir: 'cypress/reports/html',
+            reportFiles: 'mochawesome.html',
+            reportName: 'Cypress HTML Report',
+            keepAll: true,
+            alwaysLinkToLastBuild: true,
+            allowMissing: true
+        ])
     }
 }
