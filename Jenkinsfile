@@ -31,7 +31,7 @@ node("ci-node") {
 
 post {
     always {
-       # archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+       // archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
 
         publishHTML([
             reportDir: 'cypress/reports/html',
