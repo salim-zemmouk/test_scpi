@@ -12,6 +12,7 @@ node("ci-node") {
 
     stage("Install dependencies") {
         sh "npm install"
+        sh "npm install --save-dev cypress-mochawesome-reporter"
     }
 
     stage("Run Cypress Tests") {
