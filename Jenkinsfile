@@ -30,6 +30,7 @@ node("ci-node") {
                               cypress/included:14.2.1 sh -c "npm run test && npm run posttest"
                         '''
                     }
+                    sh 'npm run posttest'
                 } catch (Exception e) {
                     echo "Une erreur s'est produite lors du lancement des tests e2e"
                 }
