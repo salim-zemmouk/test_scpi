@@ -19,7 +19,7 @@ node("ci-node") {
         withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
             script {
                 try {
-                    withEnv(["USERNAME=$USERNAME", "PASSWORD=$PASSWORD"]) {
+                    withEnv(["USERNAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
                         sh '''
                             sudo docker run --rm --pull always \
                               -u $(id -u):$(id -g) \
@@ -27,9 +27,8 @@ node("ci-node") {
                               -e PASSWORD=$PASSWORD \
                               -v $(pwd):/app \
                               -w /app \
-                              cypress/included:14.2.1 npm run test
+                              cypress/included:14.2.1 sh -c "npm run test && npm run posttest"
                         '''
-                        sh 'npm run posttest'
                     }
                 } catch (Exception e) {
                     echo "Une erreur s'est produite lors du lancement des tests e2e"
@@ -42,8 +41,8 @@ node("ci-node") {
         archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
 
         publishHTML([
-            allowMissing: false,
-            alwaysLinkToLastBuild: false,
+            allowMissing: true,
+            alwaysLinkToLastBuild: true,
             keepAll: true,
             reportDir: 'cypress/reports/html',
             reportFiles: 'index.html',
