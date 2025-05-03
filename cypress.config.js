@@ -4,11 +4,9 @@ const { defineConfig } = require("cypress");
 module.exports = defineConfig({
     e2e: {
         setupNodeEvents(on, config) {
-            // Injecte les variables d'environnement
             config.env.USERNAME = process.env.USERNAME;
             config.env.PASSWORD = process.env.PASSWORD;
 
-            // Ajoute le plugin du reporter
             require('cypress-mochawesome-reporter/plugin')(on);
 
             return config;

@@ -7,10 +7,15 @@
   "type": "commonjs",
   "scripts": {
     "test": "cypress run",
+    "posttest": "npx mochawesome-merge cypress/reports/html/.jsons/*.json > cypress/reports/html/output.json && npx marge cypress/reports/html/output.json -f index -o cypress/reports/html",
     "test1": "cypress open"
   },
   "devDependencies": {
-    "cypress": "^14.2.1"
+    "cypress": "^14.2.1",
+    "cypress-mochawesome-reporter": "^3.6.1",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
