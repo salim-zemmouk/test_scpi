@@ -1,6 +1,12 @@
 node("ci-node") {
     def GIT_COMMIT_HASH = ""
 
+    stage("Clean workspace") {
+        steps {
+            sh "sudo rm -rf /opt/workspace/test_scpi || true"
+        }
+    }
+
     stage("Checkout") {
         checkout scm
         GIT_COMMIT_HASH = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true).trim()
