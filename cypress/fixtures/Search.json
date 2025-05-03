@@ -1,7 +1,7 @@
 {
   "ByExatDatta":
   {
-    "searchTerm": "Coeur",
+    "searchTerm": "coeur de region",
 
     "locations": [
       "France"
@@ -12,7 +12,7 @@
     "minimumSubscription": 2656.00,
     "subscriptionFees": true,
     "rentalFrequency": "Trimestrielle",
-    "distributionRate": 6.0
+    "distributionRate": 6.2
   },
   "ByMinSubscription":
   {

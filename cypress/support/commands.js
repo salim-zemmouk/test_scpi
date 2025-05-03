@@ -18,3 +18,13 @@ Cypress.Commands.add('getScpiInvestToken', () => {
             return cy.wrap(access_token);
         });
 });
+Cypress.Commands.add('login',()=>{
+        cy.visit('/');
+        cy.get('.btn-primary').click()
+        cy.origin('https://keycloak.check-consulting.net', () => {
+            cy.get('#username').type(Cypress.env('CYPRESS_USERNAME'));
+            cy.get('#password').type(Cypress.env('CYPRESS_PASSWORD'));
+            cy.get('#kc-login').click()
+        });
+        cy.url().should('include','/dashboard');
+});

@@ -1,0 +1,28 @@
+{
+  "dbLength": 52,
+  "totalInvestment": 10000,
+  "scpi1":
+{
+  "scpiName": "Transitions Europe",
+  "RevenusMensuels": 69.58,
+  "Frais_de_souscription":1000.00,
+  "distribution_Rate":8.35,
+  "Cashback":500.00
+},
+  "scpi2":
+{
+  "scpiName": "Iroko Zen",
+  "RevenusMensuels":59.33,
+  "Frais_de_souscription":"0.00",
+  "distribution_Rate":7.12,
+  "Cashback":"0.00"
+},
+  "scpi3":
+  {
+    "scpiName": "Comète",
+    "RevenusMensuels":66.67,
+    "Frais_de_souscription":1000.00,
+    "distribution_Rate":8.00,
+    "Cashback":400.00
+  }
+}

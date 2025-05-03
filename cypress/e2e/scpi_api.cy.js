@@ -61,7 +61,7 @@ describe('template spec', () => {
 
       })
   })
-    it('should Retourne SCPI Research ', () => {
+    it.only('should Retourne SCPI Research ', () => {
             cy.request(({
                 method:"GET",
                 url:'https://qua.scpi-invest-plus-api.check-consulting.net/api/v1/scpi/search',
@@ -73,8 +73,8 @@ describe('template spec', () => {
             })).then((response)=>{
                 expect(response.status).to.eq(200);
                 expect(response.body.length).to.eq(1);
-                expect(response.body[0].name).to.eq("Coeur de Regions");
-                expect(response.body[0].statYear).to.have.property("distributionRate",6.2);
+                expect(response.body[0].name).to.eq("Coeur de regions");
+                expect(response.body[0].statYear).to.have.property("distributionRate",searchData.ByExactDatta.distributionRate);
             })
     });
     it('should Retourne SCPI By Minimum_subscription ', () => {
