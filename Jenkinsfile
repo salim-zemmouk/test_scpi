@@ -35,16 +35,7 @@ node("ci-node") {
         }
     }
 
-    stage("Archive Test Report") {
+    stage("Archive Screenshots") {
         archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
-
-        publishHTML([
-            allowMissing: true,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: 'cypress/reports/html',
-            reportFiles: 'index.html',
-            reportName: 'Cypress HTML Report'
-        ])
     }
 }
