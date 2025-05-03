@@ -8,7 +8,6 @@ module.exports = defineConfig({
             config.env.PASSWORD = process.env.PASSWORD;
 
             require('cypress-mochawesome-reporter/plugin')(on);
-
             return config;
         },
         specPattern: 'cypress/e2e/**/*.cy.js',
@@ -18,7 +17,7 @@ module.exports = defineConfig({
     reporterOptions: {
         reportDir: 'cypress/reports/html',
         overwrite: false,
-        html: true,
+        html: false,
         json: true
     }
 });
