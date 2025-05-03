@@ -1,26 +1,41 @@
-node("ci-node") {
-    def GIT_COMMIT_HASH = ""
+pipeline {
+    agent { label "ci-node" }
 
-    stage("Checkout") {
-        checkout scm
-        GIT_COMMIT_HASH = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true).trim()
+    environment {
+        GIT_COMMIT_HASH = ""
     }
 
-    stage("Install dependencies") {
-        sh "npm install"
-        sh "npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator cypress-mochawesome-reporter"
-    }
+    stages {
+        stage("Checkout") {
+            steps {
+                checkout scm
+                script {
+                    GIT_COMMIT_HASH = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true).trim()
+                }
+            }
+        }
 
-    stage("Run Cypress Tests") {
-        withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
-            sh """
-                sudo docker run --rm --pull always \\
-                  -e USERNAME=$username \\
-                  -e PASSWORD=$password \\
-                  -v \$(pwd):/app \\
-                  -w /app \\
-                  cypress/included:14.2.1 npm run test
-            """
+        stage("Install dependencies") {
+            steps {
+                sh "npm install"
+                sh "npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator cypress-mochawesome-reporter"
+            }
+        }
+
+        stage("Run Cypress Tests") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sh """
+                        sudo docker run --rm --pull always \\
+                          -u \$(id -u):\$(id -g) \\
+                          -e USERNAME=$username \\
+                          -e PASSWORD=$password \\
+                          -v \$(pwd):/app \\
+                          -w /app \\
+                          cypress/included:14.2.1 npm run test
+                    """
+                }
+            }
         }
     }
 
