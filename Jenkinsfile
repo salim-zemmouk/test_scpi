@@ -27,19 +27,19 @@ node("ci-node") {
             """
         }
     }
-}
 
-post {
-    always {
-       // archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+    post {
+        always {
+            archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
 
-        publishHTML([
-            reportDir: 'cypress/reports/html',
-            reportFiles: 'mochawesome.html',
-            reportName: 'Cypress HTML Report',
-            keepAll: true,
-            alwaysLinkToLastBuild: true,
-            allowMissing: true
-        ])
+            publishHTML([
+                reportDir: 'cypress/reports/html',
+                reportFiles: 'mochawesome.html',
+                reportName: 'Cypress HTML Report',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: true
+            ])
+        }
     }
 }
