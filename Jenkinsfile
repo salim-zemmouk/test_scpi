@@ -34,7 +34,9 @@ node("ci-node") {
             }
         }
     }
-
+    stage("Generate report") {
+            sh "npm run posttest"
+        }
     stage("Archive Test Report") {
         archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
 
