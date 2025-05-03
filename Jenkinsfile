@@ -2,7 +2,7 @@ node("ci-node") {
     def GIT_COMMIT_HASH = ""
 
     stage("Clean workspace") {
-        sh "sudo rm -rf /opt/workspace/test_scpi || true"
+        sh "sudo rm -rf cypress node_modules package-lock.json || true"
     }
 
     stage("Checkout") {
