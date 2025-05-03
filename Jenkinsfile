@@ -16,7 +16,7 @@ node("ci-node") {
     }
 
     stage("Run Cypress Tests") {
-        withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
+        withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: $PASSWORD, usernameVariable: $USERNAME)]) {
             sh """
                 sudo docker run --rm --pull always \\
                   -u \$(id -u):\$(id -g) \\
