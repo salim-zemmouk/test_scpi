@@ -7,7 +7,7 @@
   "type": "commonjs",
   "scripts": {
     "test": "cypress run",
-    "posttest": "bash scripts/posttest.sh",
+    //"posttest": "bash scripts/posttest.sh",
     "test1": "cypress open"
   },
   "devDependencies": {
