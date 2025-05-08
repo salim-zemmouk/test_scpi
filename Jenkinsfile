@@ -26,7 +26,8 @@ node("ci-node") {
                          -e PASSWORD=${PASSWORD} \\
                          -v \$(pwd):/app \\
                          -w /app \\
-                         cypress/included:14.2.1 sh -c "npm run test && npm run posttest"
+                         cypress/included:14.2.1 sh -c "npm run test"\\
+                         cypress/included:14.2.1 sh -c "npm run posttest"
                    """
                 } catch (Exception e) {
                     echo "Une erreur s'est produite lors de l'exécution des tests E2E : ${e.getMessage()}"
