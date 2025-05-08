@@ -25,15 +25,15 @@ node("ci-node") {
         withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
             script {
                 try {
-                    sh '''#!/bin/bash
-                        sudo docker run --rm --pull always \
-                          -u $(id -u):$(id -g) \
-                          -e USERNAME=$username \
-                          -e PASSWORD=$password \
-                          -v $(pwd):/app \
-                          -w /app \
-                          cypress/included:14.2.1 \
-                          sh -c "npm run test"
+                    sh '''
+                      #!/bin/bash
+                      sudo docker run --rm --pull always \
+                        -u $(id -u):$(id -g) \
+                        -e USERNAME=$username \
+                        -e PASSWORD=$password \
+                        -v $(pwd):/e2e \
+                        -w /e2e \
+                        cypress/included:14.2.1
                     '''
                 } catch (Exception e) {
                     echo "Une erreur s'est produite lors de l'exécution des tests E2E : ${e.getMessage()}"
