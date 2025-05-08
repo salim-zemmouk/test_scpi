@@ -15,18 +15,25 @@ node("ci-node") {
         sh "npm install --save-dev cypress-mochawesome-reporter mochawesome mochawesome-merge mochawesome-report-generator"
     }
 
+    stage("Docker Login") {
+        withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
+            sh 'sudo docker login -u "$username" -p "$password"'
+        }
+    }
+
     stage("Run Cypress Tests") {
-        withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+        withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
             script {
                 try {
                     sh '''#!/bin/bash
                         sudo docker run --rm --pull always \
                           -u $(id -u):$(id -g) \
-                          -e USERNAME=$USERNAME \
-                          -e PASSWORD=$PASSWORD \
+                          -e USERNAME=$username \
+                          -e PASSWORD=$password \
                           -v $(pwd):/app \
                           -w /app \
-                          cypress/included:14.2.1 sh -c "npm run test && npm run posttest"
+                          cypress/included:14.2.1 \
+                          sh -c "npm run test && npm run posttest"
                     '''
                 } catch (Exception e) {
                     echo "Une erreur s'est produite lors de l'exécution des tests E2E : ${e.getMessage()}"
