@@ -41,6 +41,20 @@ node("ci-node") {
             }
         }
     }
+   stage('Generate HTML Report') {
+                   steps {
+                       script {
+                           sh '''
+                           docker run --rm \
+                             -u $(id -u):$(id -g) \
+                             -v $(pwd):/e2e \
+                             -w /e2e \
+                             node:18 bash scripts/posttest.sh
+                           '''
+                       }
+                   }
+   }
+
 
     stage("Archive Screenshots") {
         archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
