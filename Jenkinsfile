@@ -42,18 +42,11 @@ node("ci-node") {
         }
     }
 stage('Generate HTML Report') {
-    script {
-        sh '''
-            #!/bin/bash
-            chmod +x scripts/posttest.sh
-            docker run --rm \
-              -u $(id -u):$(id -g) \
-              -v $(pwd):/e2e \
-              -w /e2e \
-              node:18 \
-              bash -c "npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator && scripts/posttest.sh"
-        '''
-    }
+    sh '''
+        npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
+        chmod +x scripts/posttest.sh
+        scripts/posttest.sh
+    '''
 }
 
 
