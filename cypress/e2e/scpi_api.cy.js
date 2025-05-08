@@ -61,7 +61,7 @@ describe('template spec', () => {
 
       })
   })
-    it.only('should Retourne SCPI Research ', () => {
+    it('should Retourne SCPI Research ', () => {
             cy.request(({
                 method:"GET",
                 url:'https://qua.scpi-invest-plus-api.check-consulting.net/api/v1/scpi/search',

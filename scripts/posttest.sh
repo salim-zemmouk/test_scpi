@@ -1,11 +1,10 @@
 #!/bin/bash
 
-echo "📦 Génération des rapports HTML avec mochawesome..."
+# Installer les dépendances (si ce n'est pas déjà fait)
+npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
 
-if ls cypress/reports/html/*.json 1> /dev/null 2>&1; then
-  npx mochawesome-merge cypress/reports/html/*.json > cypress/reports/html/output.json
-  npx marge cypress/reports/html/output.json -f index -o cypress/reports/html
-  echo "✅ Rapport généré dans cypress/reports/html/index.html"
-else
-  echo "❌ Aucun fichier JSON trouvé dans cypress/reports/html"
-fi
+# Fusionner tous les fichiers JSON générés par Cypress
+npx mochawesome-merge cypress/reports/html/jsons/*.json > cypress/reports/html/mochawesome.json
+
+# Générer un rapport HTML à partir du JSON fusionné
+npx marge cypress/reports/html/mochawesome.json --reportDir cypress/reports/html --reportFilename index

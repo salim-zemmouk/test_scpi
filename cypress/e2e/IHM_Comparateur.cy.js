@@ -47,8 +47,8 @@ describe('Perform UI testing of the application features',()=> {
                 cy.get('td').eq(3).should('contain', comparatorData.scpi3.Frais_de_souscription)
             });
     })
-    // it('Should test simulation');
-    // it('should test crédit');
-    // it('Should test versements programmés')
+    it('Should test simulation');
+    it('should test crédit');
+    it('Should test versements programmés')
 
 });
