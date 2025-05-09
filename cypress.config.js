@@ -16,11 +16,16 @@ module.exports = defineConfig({
         specPattern: 'cypress/e2e/**/*.cy.js',
         supportFile: 'cypress/support/e2e.js'
     },
-    reporter: 'cypress-mochawesome-reporter',
+    reporter: 'mochawesome',
     reporterOptions: {
-        reportDir: 'cypress/reports/html',
+        charts: true,
+        reportPageTitle: 'Rapport de tests SCPI',
+        embeddedScreenshots: true,
+        inlineAssets: true,
+        saveAllAttempts: false,
+        reportDir: 'cypress/reports',
         overwrite: false,
         html: true,
-        json: false
-    }
+        json: true,
+    },
 });

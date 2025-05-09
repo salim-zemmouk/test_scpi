@@ -53,7 +53,7 @@ node("ci-node") {
             }
         }
         stage("Générer le rapport HTML") {
-                sh 'npx mochawesome-report-generator cypress/reports/index.html --reportDir cypress/reports/html'
+                sh 'npx mochawesome-report-generator cypress/reports/mochawesome.json -o cypress/reports/html'
         }
         stage("Archive HTML Report") {
             archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: false
