@@ -54,6 +54,9 @@ node("ci-node") {
     stage("Archive HTML Report") {
         archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: false
     }
+    stage("Archive HTML Report") {
+        archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: false
+    }
 }
 post {
         always {
