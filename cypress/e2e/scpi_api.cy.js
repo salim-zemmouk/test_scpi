@@ -36,7 +36,7 @@ describe('template spec', () => {
         cy.log(response.body);
       })
   });
-  it.only('should recuperate scpi details by ID', () => {
+  it('should recuperate scpi details by ID', () => {
       cy.request({
         method: 'GET',
         url: 'https://qua.scpi-invest-plus-api.check-consulting.net/api/v1/scpi/details/1',
