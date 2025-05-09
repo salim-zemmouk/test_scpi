@@ -1,3 +1,4 @@
+import 'cypress-mochawesome-reporter/register';
 const qs = require('qs');
 Cypress.Commands.add('getScpiInvestToken', () => {
         cy.request({
@@ -10,8 +11,8 @@ Cypress.Commands.add('getScpiInvestToken', () => {
             body: {
                 grant_type: 'password',
                 client_id: 'scpi-invest-plus',
-                username: 'sz93',
-                password: 'Test93'
+                username: Cypress.env('CYPRESS_USERNAME'),
+                password: Cypress.env('CYPRESS_PASSWORD')
             }
         }).then((response) => {
             const { access_token } = response.body;

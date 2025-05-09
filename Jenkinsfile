@@ -13,7 +13,6 @@ node("ci-node") {
 
     stage("Install dependencies") {
         sh "npm ci"
-        sh "npm install --save-dev cypress-mochawesome-reporter mochawesome mochawesome-merge mochawesome-report-generator"
     }
 
     stage("Docker Login") {
@@ -52,41 +51,19 @@ node("ci-node") {
             }
         }
     }
-
-    // Étapes conditionnelles en cas d'échec des tests
-    if (testFailed) {
-        stage('Generate HTML Report') {
-            sh '''
-                npx mochawesome-merge cypress/reports/html/jsons/*.json > cypress/reports/html/mochawesome.json
-                npx marge cypress/reports/html/mochawesome.json --reportDir cypress/reports/html --reportFilename index
-            '''
-        }
-
-        stage("Archive Test Report") {
-            archiveArtifacts artifacts: 'cypress/reports/html/index.html', allowEmptyArchive: false
-        }
-
-        stage("Archive Screenshots") {
-            archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
-        }
-
-        stage("Send Email if Failed") {
-            mail to: 'ton.email@exemple.com',
-                 subject: "🔴 Échec des tests Cypress - Build #${env.BUILD_NUMBER}",
-                 body: """
-Bonjour,
-
-Les tests Cypress ont échoué dans le pipeline Jenkins.
-
-🔗 Rapport HTML : ${env.BUILD_URL}artifact/cypress/reports/html/index.html
-📎 Screenshots disponibles dans les artefacts du build.
-
-🕒 Date : ${new Date()}
-🔁 Commit Git : ${GIT_COMMIT_HASH}
-
-Cordialement,
-Jenkins
-                 """
-        }
+    stage("Archive HTML Report") {
+        archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: false
     }
 }
+post {
+        always {
+            echo "Pipeline terminé"
+        }
+        success {
+            echo "✅ Tous les tests sont passés"
+        }
+        failure {
+            echo "❌ Des tests ont échoué"
+            // sendEmail(...) si tu veux l'ajouter plus tard
+        }
+    }
