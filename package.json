@@ -7,7 +7,7 @@
   "type": "commonjs",
   "scripts": {
     "test": "cypress run --reporter cypress-mochawesome-reporter",
-    "test1": "cypress open"
+    "posttest": "mochawesome-merge cypress/results/*.json > merged-report.json && marge merged-report.json -f report -o mochawesome-report"
   },
   "devDependencies": {
     "cypress": "^14.2.1",

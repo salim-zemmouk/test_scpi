@@ -11,7 +11,7 @@ node("ci-node") {
     }
 
     stage("Install dependencies") {
-        sh "npm install"
+        sh "npm ci"
         sh "npm install --save-dev cypress-mochawesome-reporter mochawesome mochawesome-merge mochawesome-report-generator"
     }
 
@@ -21,36 +21,66 @@ node("ci-node") {
         }
     }
 
+    def testFailed = false
+
     stage("Run Cypress Tests") {
         withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
             script {
                 try {
                     sh '''
                       #!/bin/bash
+                      set +e
                       sudo docker run --rm --pull always \
                         -u $(id -u):$(id -g) \
-                        -e USERNAME=$username \
-                        -e PASSWORD=$password \
+                        -e USERNAME=$USERNAME \
+                        -e PASSWORD=$PASSWORD \
                         -v $(pwd):/e2e \
                         -w /e2e \
                         cypress/included:14.2.1
+                      echo $? > test_exit_code.txt
                     '''
+                    def exitCode = sh(script: "cat test_exit_code.txt", returnStdout: true).trim()
+                    if (exitCode != "0") {
+                        testFailed = true
+                        echo "Les tests Cypress ont échoué (exit code ${exitCode})."
+                    } else {
+                        echo "Les tests Cypress ont réussi."
+                    }
                 } catch (Exception e) {
-                    echo "Une erreur s'est produite lors de l'exécution des tests E2E : ${e.getMessage()}"
+                    echo "Erreur pendant l'exécution des tests : ${e.getMessage()}"
+                    testFailed = true
                 }
             }
         }
     }
-stage('Generate HTML Report') {
-    sh '''
-        npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
-        chmod +x scripts/posttest.sh
-        scripts/posttest.sh
-    '''
-}
 
+    stage('Generate HTML Report') {
+        when {
+            expression { return testFailed }
+        }
+        steps {
+            sh '''
+                npx mochawesome-merge cypress/reports/html/jsons/*.json > cypress/reports/html/mochawesome.json
+                npx marge cypress/reports/html/mochawesome.json --reportDir cypress/reports/html --reportFilename index
+            '''
+        }
+    }
+
+    stage("Archive Test Report") {
+        when {
+            expression { return testFailed }
+        }
+        steps {
+            archiveArtifacts artifacts: 'cypress/reports/html/index.html', allowEmptyArchive: false
+        }
+    }
 
     stage("Archive Screenshots") {
-        archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+        when {
+            expression { return testFailed }
+        }
+        steps {
+            archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+        }
     }
 }
