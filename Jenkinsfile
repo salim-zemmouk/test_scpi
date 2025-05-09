@@ -1,5 +1,6 @@
 node("ci-node") {
     def GIT_COMMIT_HASH = ""
+    def testFailed = false
 
     stage("Clean workspace") {
         sh "sudo rm -rf cypress node_modules package-lock.json || true"
@@ -20,8 +21,6 @@ node("ci-node") {
             sh 'sudo docker login -u "$username" -p "$password"'
         }
     }
-
-    def testFailed = false
 
     stage("Run Cypress Tests") {
         withCredentials([usernamePassword(credentialsId: 'mchekini', passwordVariable: 'password', usernameVariable: 'username')]) {
@@ -54,33 +53,40 @@ node("ci-node") {
         }
     }
 
-    stage('Generate HTML Report') {
-        when {
-            expression { return testFailed }
-        }
-        steps {
+    // Étapes conditionnelles en cas d'échec des tests
+    if (testFailed) {
+        stage('Generate HTML Report') {
             sh '''
                 npx mochawesome-merge cypress/reports/html/jsons/*.json > cypress/reports/html/mochawesome.json
                 npx marge cypress/reports/html/mochawesome.json --reportDir cypress/reports/html --reportFilename index
             '''
         }
-    }
 
-    stage("Archive Test Report") {
-        when {
-            expression { return testFailed }
-        }
-        steps {
+        stage("Archive Test Report") {
             archiveArtifacts artifacts: 'cypress/reports/html/index.html', allowEmptyArchive: false
         }
-    }
 
-    stage("Archive Screenshots") {
-        when {
-            expression { return testFailed }
-        }
-        steps {
+        stage("Archive Screenshots") {
             archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+        }
+
+        stage("Send Email if Failed") {
+            mail to: 'ton.email@exemple.com',
+                 subject: "🔴 Échec des tests Cypress - Build #${env.BUILD_NUMBER}",
+                 body: """
+Bonjour,
+
+Les tests Cypress ont échoué dans le pipeline Jenkins.
+
+🔗 Rapport HTML : ${env.BUILD_URL}artifact/cypress/reports/html/index.html
+📎 Screenshots disponibles dans les artefacts du build.
+
+🕒 Date : ${new Date()}
+🔁 Commit Git : ${GIT_COMMIT_HASH}
+
+Cordialement,
+Jenkins
+                 """
         }
     }
 }
